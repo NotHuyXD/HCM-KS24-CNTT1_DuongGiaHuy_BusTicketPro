@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Nhập - Bus Ticket Pro</title>
+</head>
+<body style="font-family: Arial; padding: 30px;">
+<h2>Đăng Nhập Hệ Thống</h2>
+
+<div th:if="${param.error}" style="color: red;">Sai tên đăng nhập hoặc mật khẩu!</div>
+<div th:if="${param.logout}" style="color: green;">Đã đăng xuất thành công.</div>
+<div th:if="${param.registered}" style="color: blue;">Đăng ký thành công, vui lòng đăng nhập!</div>
+
+<form th:action="@{/login}" method="post">
+    Tên đăng nhập: <input type="text" name="username" required><br><br>
+    Mật khẩu: <input type="password" name="password" required><br><br>
+    <button type="submit">Đăng nhập</button>
+</form>
+<br>
+<a href="/register">Chưa có tài khoản? Đăng ký ngay</a>
+</body>
+</html>
