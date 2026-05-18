@@ -42,7 +42,7 @@
     <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
     <div class="section">
-        <h3>CORE-05 & CORE-06: Đặt Ghế Nhanh</h3>
+        <h3>Đặt Ghế Nhanh</h3>
         <p style="font-size: 14px; color: #666;">Nhập mã ID của ghế trống trong hệ thống để thực hiện đặt vé và giữ chỗ an toàn dưới dạng Transaction.</p>
         <form th:action="@{/booking/book}" method="post" class="form-inline">
             <input type="number" name="seatId" required placeholder="Nhập ID ghế cần đặt (Ví dụ: 1, 2, 3...)">
@@ -51,7 +51,7 @@
     </div>
 
     <div class="section">
-        <h3>CORE-07: Tra cứu vé & Xem thông tin chuyến xe</h3>
+        <h3>Tra cứu vé & Xem thông tin chuyến xe</h3>
         <form th:action="@{/search-ticket}" method="get" class="form-inline">
             <input type="text" name="ticketCode" th:value="${param.ticketCode}" required placeholder="Mã vé của bạn (Ví dụ: BKP-XXXXXX)">
             <input type="text" name="phone" th:value="${param.phone}" required placeholder="Số điện thoại đăng ký">
