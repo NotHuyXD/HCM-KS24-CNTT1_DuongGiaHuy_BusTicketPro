@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sơ Đồ Ghế Ngồi</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 30px; text-align: center; }
+        .seat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 400px; margin: 20px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .seat-btn { padding: 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; width: 100%; transition: 0.2s; }
+        .AVAILABLE { background: #28a745; color: white; }
+        .AVAILABLE:hover { background: #218838; transform: scale(1.05); }
+        .PENDING { background: #ffc107; color: black; cursor: not-allowed; }
+        .BOOKED { background: #dc3545; color: white; cursor: not-allowed; }
+        .legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .legend span { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 14px;}
+    </style>
+</head>
+<body>
+
+<h2>Sơ đồ ghế: <span th:text="${bus.plateNumber}"></span></h2>
+<a th:href="@{/}" style="color: #007bff; text-decoration: none;">⬅ Quay lại tìm kiếm</a>
+
+<div class="legend" style="margin-top: 20px;">
+    <span class="AVAILABLE">Ghế Trống</span>
+    <span class="PENDING">Đang Chờ Thanh Toán</span>
+    <span class="BOOKED">Đã Bán</span>
+</div>
+
+<div class="seat-grid">
+    <div th:each="seat : ${seats}">
+        <form th:if="${seat.status.name() == 'AVAILABLE'}" th:action="@{/booking/book}" method="post">
+            <input type="hidden" name="seatId" th:value="${seat.id}">
+            <button type="submit" class="seat-btn AVAILABLE" th:text="${seat.seatName}" onclick="return confirm('Xác nhận đặt ghế này?');"></button>
+        </form>
+
+        <button th:if="${seat.status.name() != 'AVAILABLE'}"
+                th:class="'seat-btn ' + ${seat.status.name()}"
+                th:text="${seat.seatName}" disabled></button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Tuyến Đường - Bus Ticket Pro</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; display: flex; }
+        .sidebar { width: 240px; background: #2c3e50; position: fixed; height: 100%; color: white; padding-top: 20px; }
+        .sidebar h2 { text-align: center; font-size: 20px; margin-bottom: 30px; color: #ecf0f1; }
+        .sidebar a { display: block; color: #bdc3c7; padding: 15px 20px; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { background: #34495e; color: white; }
+        .content { margin-left: 240px; padding: 30px; flex: 1; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #343a40; color: white; }
+        .btn { padding: 8px 12px; text-decoration: none; border-radius: 4px; color: white; border: none; cursor: pointer; font-weight: bold;}
+        .btn-add { background-color: #28a745; display: inline-block; margin-bottom: 15px; }
+        .btn-edit { background-color: #ffc107; color: black; }
+        .btn-delete { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Bus Ticket Admin</h2>
+    <a th:href="@{/admin/routes}" class="active">⚙ Cấu hình Tuyến đường</a>
+    <a th:href="@{/admin/buses}">🚌 Quản lý Danh mục Xe</a>
+    <a th:href="@{/admin/reports}">📊 Báo cáo thống kê</a>
+    <a th:href="@{/logout}">🚪 Đăng xuất</a>
+</div>
+
+<div class="content">
+    <h2>⚙ Mạng Lưới Tuyến Đường Liên Tỉnh</h2>
+    <a th:href="@{/admin/routes/add}" class="btn btn-add">+ Thêm Tuyến Đường Mới</a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Điểm Đi (Tỉnh/Thành)</th>
+            <th>Điểm Đến (Tỉnh/Thành)</th>
+            <th>Khoảng Cách (Km)</th>
+            <th>Giá Vé Cơ Bản</th>
+            <th>Hành Động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${routes}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.startLocation}" style="font-weight: bold;"></td>
+            <td th:text="${r.endLocation}" style="font-weight: bold;"></td>
+            <td th:text="${r.distanceKm} + ' Km'"></td>
+            <td th:text="${#numbers.formatDecimal(r.basePrice, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'" style="color: green; font-weight: bold;"></td>
+            <td>
+                <div style="display: flex; gap: 5px;">
+                    <a th:href="@{/admin/routes/edit/{id}(id=${r.id})}" class="btn btn-edit">Sửa</a>
+                    <form th:action="@{/admin/routes/delete/{id}(id=${r.id})}" method="post">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Bạn chắc chắn muốn xóa tuyến đường này? Tất cả các xe thuộc tuyến này sẽ bị ảnh hưởng!');">Xóa</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

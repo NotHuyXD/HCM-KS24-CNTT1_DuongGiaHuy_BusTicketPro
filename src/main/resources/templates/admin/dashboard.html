@@ -4,33 +4,47 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard - Bus Ticket Pro</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; }
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; display: flex; }
+
+        /* Cấu trúc Thanh Sidebar */
         .sidebar { width: 240px; background: #2c3e50; position: fixed; height: 100%; color: white; padding-top: 20px; }
         .sidebar h2 { text-align: center; font-size: 20px; margin-bottom: 30px; color: #ecf0f1; }
-        .sidebar a { display: block; color: #bdc3c7; padding: 15px 20px; text-decoration: none; }
-        .sidebar a:hover { background: #34495e; color: white; }
-        .content { margin-left: 240px; padding: 30px; }
+        .sidebar a { display: block; color: #bdc3c7; padding: 15px 20px; text-decoration: none; font-weight: bold; }
+        .sidebar a:hover, .sidebar a.active { background: #34495e; color: white; border-left: 4px solid #007bff; }
+
+        /* Cấu trúc Vùng hiển thị Nội dung */
+        .content { margin-left: 240px; padding: 30px; flex: 1; }
         .header { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .welcome-text { color: #333; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <h2>Bus Ticket Admin</h2>
-    <a href="#">⚙ Cấu hình Tuyến đường</a>
-    <a href="#">🚌 Quản lý Danh mục Xe</a>
-    <a href="#">📊 Báo cáo thống kê</a>
+    <a th:href="@{/admin/routes}">⚙ Cấu hình Tuyến đường</a>
+    <a th:href="@{/admin/buses}">🚌 Quản lý Danh mục Xe</a>
+    <a th:href="@{/admin/reports}">📊 Báo cáo thống kê</a>
     <a th:href="@{/logout}">🚪 Đăng xuất</a>
 </div>
 
 <div class="content">
     <div class="header">
-        <h2>Bảng Điều Khiển Quản Trị Hệ Thống (CORE-04)</h2>
+        <h2>Bảng Điều Khiển Quản Trị Hệ Thống (Màn Hình Chính)</h2>
     </div>
+
     <div class="card">
-        <h3>Chào mừng Admin đã quay trở lại!</h3>
-        <p>Hệ thống phân quyền phân giải bộ lọc bảo mật hoạt động hoàn hảo. Bạn có toàn quyền thực hiện các thao tác CRUD danh mục Xe (Bus) và thiết lập thông số mạng lưới Tuyến đường liên tỉnh.</p>
+        <h3 class="welcome-text">Chào mừng Quản trị viên đã quay trở lại!</h3>
+        <p class="welcome-text">
+            Hệ thống phân quyền phân giải bộ lọc bảo mật hoạt động ổn định.
+            Sử dụng thanh navbar bên trái để chuyển đổi nhanh giữa các phân hệ:
+        </p>
+        <ul class="welcome-text">
+            <li><strong>Cấu hình Tuyến đường:</strong> Xem danh sách, thêm mới địa điểm đi/đến, thiết lập cự ly và giá vé sàn liên tỉnh.</li>
+            <li><strong>Quản lý Danh mục Xe:</strong> CRUD dữ liệu xe khách chạy tuyến, gán xe vào mạng lưới luồng dịch vụ tương ứng.</li>
+            <li><strong>Báo cáo thống kê:</strong> Theo dõi tổng số lượng vé phát hành và tổng doanh thu thực nhận thời gian thực.</li>
+        </ul>
     </div>
 </div>
 

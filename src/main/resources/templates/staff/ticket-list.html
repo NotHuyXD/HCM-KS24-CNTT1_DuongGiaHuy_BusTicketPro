@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nhân Viên - Quản Lý Vé Xe</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; }
+        .content { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #17a2b8; color: white; }
+        .btn { padding: 6px 12px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: bold; }
+        .btn-approve { background-color: #28a745; }
+        .btn-cancel { background-color: #dc3545; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .bg-pending { background-color: #ffc107; color: black; }
+        .bg-paid { background-color: #28a745; color: white; }
+        .bg-cancelled { background-color: #6c757d; color: white; }
+        .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Dành Cho Nhân Viên: Kiểm Duyệt & Quản Lý Trạng Thái Vé (CORE-08)</h2>
+        <a th:href="@{/logout}" style="color: #dc3545; font-weight: bold; text-dash: none;">🚪 Đăng xuất</a>
+    </div>
+
+    <div th:if="${success}" class="alert success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Mã Vé</th>
+            <th>Khách Hàng</th>
+            <th>Số Điện Thoại</th>
+            <th>Ghế Chọn</th>
+            <th>Tuyến Đường Running</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động Khởi Chạy</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${tickets}">
+            <td th:text="${t.ticketCode}" style="font-weight: bold; color: #007bff;"></td>
+            <td th:text="${t.user.fullName}"></td>
+            <td th:text="${t.user.phone}"></td>
+            <td th:text="${t.seat.seatName}" style="font-weight: bold;"></td>
+            <td th:text="${t.seat.bus.route.startLocation} + ' - ' + ${t.seat.bus.route.endLocation}"></td>
+            <td>
+                <span th:if="${t.status.name() == 'PENDING'}" class="badge bg-pending">CHỜ DUYỆT</span>
+                <span th:if="${t.status.name() == 'PAID'}" class="badge bg-paid">ĐÃ THANH TOÁN</span>
+                <span th:if="${t.status.name() == 'CANCELLED'}" class="badge bg-cancelled">ĐÃ HỦY VÉ</span>
+            </td>
+            <td>
+                <div th:if="${t.status.name() == 'PENDING'}" style="display: flex; gap: 5px;">
+                    <form th:action="@{/staff/tickets/approve/{id}(id=${t.id})}" method="post">
+                        <button type="submit" class="btn btn-approve">Duyệt Giao Dịch</button>
+                    </form>
+                    <form th:action="@{/staff/tickets/cancel/{id}(id=${t.id})}" method="post">
+                        <button type="submit" class="btn btn-cancel" onclick="return confirm('Xác nhận hủy và giải phóng ghế này?');">Hủy Vé</button>
+                    </form>
+                </div>
+                <span th:if="${t.status.name() != 'PENDING'}" style="color: #999; font-style: italic;">Không thể thao tác</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -4,35 +4,30 @@
     <meta charset="UTF-8">
     <title>Trang Chủ - Bus Ticket Pro</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333; }
-        header { background-color: #343a40; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 24px; }
-        .user-info a { color: #ffc107; text-decoration: none; margin-left: 15px; font-weight: bold; }
-        .main-content { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        h3 { color: #007bff; }
-        .form-inline { display: flex; gap: 10px; margin-top: 10px; }
-        .form-inline input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
-        .form-inline button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .form-inline button:hover { background-color: #0056b3; }
-        .ticket-card { background-color: #e9ecef; padding: 20px; border-left: 5px solid #28a745; border-radius: 4px; margin-top: 15px; }
-        .ticket-card p { margin: 5px 0; }
-        .alert { padding: 12px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; }
+        header { background: #343a40; color: white; padding: 15px 30px; display: flex; justify-content: space-between; }
+        .main-content { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .search-box { background: #007bff; padding: 20px; border-radius: 8px; color: white; margin-bottom: 20px;}
+        input { padding: 10px; border-radius: 4px; border: none; margin-right: 10px; width: 30%; }
+        button { padding: 10px 20px; background: #ffc107; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .bus-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;}
+        .alert { padding: 12px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Bus Ticket Pro</h1>
-    <div class="user-info">
+    <h2>🚌 Bus Ticket Pro</h2>
+    <div>
         <span th:if="${#request.userPrincipal != null}">
-            Xin chào, <span th:text="${#request.userPrincipal.name}" style="color: #fff; font-weight: bold;"></span>!
-            <a th:href="@{/logout}">Đăng xuất</a>
+            Xin chào, <b th:text="${#request.userPrincipal.name}"></b>!
+            <a th:href="@{/my-tickets}" style="color: #ffc107; margin: 0 15px;">🎟 Vé của tôi</a>
+            <a th:href="@{/logout}" style="color: white;">Đăng xuất</a>
         </span>
         <span th:if="${#request.userPrincipal == null}">
-            <a th:href="@{/login}">Đăng nhập</a> | <a th:href="@{/register}">Đăng ký</a>
+            <a th:href="@{/login}" style="color: white;">Đăng nhập</a> | <a th:href="@{/register}" style="color: white;">Đăng ký</a>
         </span>
     </div>
 </header>
@@ -41,37 +36,27 @@
     <div th:if="${success}" class="alert success" th:text="${success}"></div>
     <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
-    <div class="section">
-        <h3>Đặt Ghế Nhanh</h3>
-        <p style="font-size: 14px; color: #666;">Nhập mã ID của ghế trống trong hệ thống để thực hiện đặt vé và giữ chỗ an toàn dưới dạng Transaction.</p>
-        <form th:action="@{/booking/book}" method="post" class="form-inline">
-            <input type="number" name="seatId" required placeholder="Nhập ID ghế cần đặt (Ví dụ: 1, 2, 3...)">
-            <button type="submit">Tiến hành đặt vé</button>
+    <div class="search-box">
+        <h3>🔍 Tìm kiếm chuyến xe</h3>
+        <form th:action="@{/search-bus}" method="get">
+            <input type="text" name="start" required placeholder="Điểm đi (VD: Hà Nội)" th:value="${start}">
+            <input type="text" name="end" required placeholder="Điểm đến (VD: Hải Phòng)" th:value="${end}">
+            <button type="submit">TÌM CHUYẾN</button>
         </form>
     </div>
 
-    <div class="section">
-        <h3>Tra cứu vé & Xem thông tin chuyến xe</h3>
-        <form th:action="@{/search-ticket}" method="get" class="form-inline">
-            <input type="text" name="ticketCode" th:value="${param.ticketCode}" required placeholder="Mã vé của bạn (Ví dụ: BKP-XXXXXX)">
-            <input type="text" name="phone" th:value="${param.phone}" required placeholder="Số điện thoại đăng ký">
-            <button type="submit" style="background-color: #17a2b8;">Tìm kiếm vé</button>
-        </form>
+    <div th:if="${buses != null}">
+        <h3>Kết quả tìm kiếm:</h3>
+        <div th:if="${#lists.isEmpty(buses)}"><p>Không tìm thấy chuyến xe nào phù hợp!</p></div>
 
-        <div th:if="${ticket}" class="ticket-card">
-            <h4>🎫 THÔNG TIN BIÊN LAI HỢP LỆ</h4>
-            <p><strong>Mã vé:</strong> <span th:text="${ticket.ticketCode}" style="color: #007bff; font-weight: bold;"></span></p>
-            <p><strong>Hành khách:</strong> <span th:text="${ticket.user.fullName}"></span></p>
-            <p><strong>Số điện thoại:</strong> <span th:text="${ticket.user.phone}"></span></p>
-            <p><strong>Số ghế:</strong> <span th:text="${ticket.seat.seatName}" style="color: #dc3545; font-weight: bold;"></span></p>
-            <p><strong>Biển số xe:</strong> <span th:text="${ticket.seat.bus.plateNumber}"></span> (<span th:text="${ticket.seat.bus.busType}"></span>)</p>
-            <p><strong>Tuyến đường:</strong> <span th:text="${ticket.seat.bus.route.startLocation} + ' ➔ ' + ${ticket.seat.bus.route.endLocation}"></span></p>
-            <p><strong>Trạng thái giao dịch:</strong>
-                <span th:text="${ticket.status}" th:style="${ticket.status.name() == 'PAID' ? 'color: green; font-weight:bold;' : 'color: orange; font-weight:bold;'}"></span>
-            </p>
+        <div th:each="bus : ${buses}" class="bus-card">
+            <div>
+                <h4 style="margin:0; color:#007bff;" th:text="${bus.route.startLocation} + ' ➔ ' + ${bus.route.endLocation}"></h4>
+                <p style="margin:5px 0;">Biển số: <b th:text="${bus.plateNumber}"></b> | Loại: <span th:text="${bus.busType}"></span></p>
+                <p style="margin:0; color: green; font-weight: bold;" th:text="'Giá vé: ' + ${#numbers.formatDecimal(bus.route.basePrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></p>
+            </div>
+            <a th:href="@{/bus/{id}/seats(id=${bus.id})}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;">CHỌN GHẾ</a>
         </div>
-
-        <div th:if="${notFound}" class="alert error" th:text="${notFound}" style="margin-top: 15px;"></div>
     </div>
 </div>
 

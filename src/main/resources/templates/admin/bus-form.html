@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm/Sửa Xe - Bus Ticket Pro</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; padding: 30px; }
+        .form-container { background: white; padding: 30px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: bold;}
+        .btn-save { background-color: #007bff; }
+        .btn-cancel { background-color: #6c757d; text-decoration: none; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2 th:text="${bus.id == null ? 'Thêm Xe Mới' : 'Cập Nhật Thông Tin Xe'}"></h2>
+
+    <form th:action="@{/admin/buses/save}" th:object="${bus}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label>Biển số xe:</label>
+            <input type="text" th:field="*{plateNumber}" required placeholder="VD: 51B-123.45">
+        </div>
+
+        <div class="form-group">
+            <label>Loại xe:</label>
+            <select th:field="*{busType}" required>
+                <option value="GIUONG_NAM">Giường Nằm</option>
+                <option value="LIMOUSINE">Limousine VIP</option>
+                <option value="GHE_NGOI">Ghế Ngồi Mềm</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Sức chứa (Số chỗ ngồi):</label>
+            <input type="number" th:field="*{capacity}" required min="10" max="60">
+        </div>
+
+        <div class="form-group">
+            <label>Gán vào Tuyến đường:</label>
+            <select th:field="*{route.id}" required>
+                <option th:each="route : ${routes}"
+                        th:value="${route.id}"
+                        th:text="${route.startLocation} + ' - ' + ${route.endLocation}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-save">Lưu Dữ Liệu</button>
+        <a th:href="@{/admin/buses}" class="btn btn-cancel">Hủy Bỏ</a>
+    </form>
+</div>
+
+</body>
+</html>
