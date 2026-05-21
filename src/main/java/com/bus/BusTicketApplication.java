@@ -2,11 +2,14 @@ package com.bus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableAsync
+@EnableScheduling
 public class BusTicketApplication {
     public static void main(String[] args) {
         SpringApplication.run(BusTicketApplication.class, args);
-        System.out.println("====== HỆ THỐNG BUS TICKET PRO ĐÃ SẴN SÀNG TẠI PORT 8080 ======");
     }
 }

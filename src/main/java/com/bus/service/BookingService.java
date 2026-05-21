@@ -17,6 +17,7 @@ public class BookingService {
 
     @Autowired private TicketRepository ticketRepository;
     @Autowired private SeatRepository seatRepository;
+    @Autowired private EmailService emailService;
 
     @Transactional(rollbackFor = Exception.class)
     public Ticket bookTicket(User user, Long seatId) throws Exception {
@@ -37,7 +38,14 @@ public class BookingService {
         ticket.setStatus(Ticket.TicketStatus.PENDING);
         ticket.setBookingTime(LocalDateTime.now());
 
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        String routeInfo = seat.getBus().getRoute().getStartLocation() + " - " + seat.getBus().getRoute().getEndLocation();
+        String seatInfo = "Biển số " + seat.getBus().getPlateNumber() + " - Ghế " + seat.getSeatName();
+
+        emailService.sendBookingConfirmation(user.getEmail(), savedTicket.getTicketCode(), routeInfo, seatInfo);
+
+        return savedTicket;
     }
 
     @Transactional
@@ -58,7 +66,6 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Không tìm thấy vé!"));
 
         if (isPassenger) {
-
         }
 
         ticket.setStatus(Ticket.TicketStatus.CANCELLED);

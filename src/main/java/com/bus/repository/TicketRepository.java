@@ -17,7 +17,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT SUM(t.seat.bus.route.basePrice) FROM Ticket t WHERE t.status = :status")
     Double calculateTotalRevenue(@Param("status") Ticket.TicketStatus status);
-    // Lấy danh sách lịch sử vé của một người dùng cụ thể
+
     List<Ticket> findByUserOrderByBookingTimeDesc(com.bus.entity.User user);
+
+    @Query("SELECT t FROM Ticket t WHERE t.status = 'PENDING' AND t.bookingTime < :cutoffTime")
+    List<Ticket> findExpiredPendingTickets(@Param("cutoffTime") java.util.Date cutoffTime);
 
 }
