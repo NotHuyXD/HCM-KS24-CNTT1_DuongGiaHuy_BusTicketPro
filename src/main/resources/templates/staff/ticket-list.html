@@ -50,7 +50,15 @@
             <td th:text="${t.user.fullName}"></td>
             <td th:text="${t.user.phone}"></td>
             <td th:text="${t.seat.seatName}" style="font-weight: bold;"></td>
-            <td th:text="${t.seat.bus.route.startLocation} + ' - ' + ${t.seat.bus.route.endLocation}"></td>
+
+            <td>
+                <span th:text="${t.seat.bus.route.startLocation} + ' ➔ ' + ${t.seat.bus.route.endLocation}"></span>
+                <br>
+                <small style="color: #e67e22; font-weight: bold;">
+                    🕒 Xuất bến: <span th:text="${t.seat.bus.departureTime != null ? #temporals.format(t.seat.bus.departureTime, 'dd/MM/yyyy HH:mm') : '---'}"></span>
+                </small>
+            </td>
+
             <td>
                 <span th:if="${t.status.name() == 'PENDING'}" class="badge bg-pending">CHỜ DUYỆT</span>
                 <span th:if="${t.status.name() == 'PAID'}" class="badge bg-paid">ĐÃ THANH TOÁN</span>

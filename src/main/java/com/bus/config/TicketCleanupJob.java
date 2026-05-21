@@ -39,4 +39,29 @@ public class TicketCleanupJob {
 
         System.out.println("✅ [CRON JOB] Quét xong. Đã tự động hủy " + count + " vé quá hạn giữ chỗ.");
     }
+
+    @Scheduled(fixedRate = 900000)
+    public void cleanupDepartedBusTickets() {
+        System.out.println("⏰ [CRON JOB - SCHEDULE] Đang kiểm tra danh sách chuyến xe đã khởi hành...");
+
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+
+        List<Ticket> missedTickets = ticketRepo.findPendingTicketsOfDepartedBuses(now);
+
+        int count = 0;
+        for (Ticket ticket : missedTickets) {
+            try {
+                bookingService.cancelTicket(ticket.getId(), false);
+                count++;
+            } catch (Exception e) {
+                System.out.println("Lỗi xử lý vé quá hạn ID " + ticket.getId() + ": " + e.getMessage());
+            }
+        }
+
+        if(count > 0) {
+            System.out.println("✅ [CRON JOB] Đã tự động hủy " + count + " vé do xe đã chạy nhưng hành khách không thanh toán.");
+        } else {
+            System.out.println("🔹 [CRON JOB] Không có vé nào bị quá hạn giờ khởi hành.");
+        }
+    }
 }

@@ -27,6 +27,8 @@
             <a th:href="@{/logout}" style="color: white;">Đăng xuất</a>
         </span>
         <span th:if="${#request.userPrincipal == null}">
+            <a th:href="@{/lookup-ticket}" style="color: #ffc107; font-weight: bold; margin-right: 15px;">🔍 Tra cứu vé</a>
+
             <a th:href="@{/login}" style="color: white;">Đăng nhập</a> | <a th:href="@{/register}" style="color: white;">Đăng ký</a>
         </span>
     </div>
@@ -53,6 +55,11 @@
             <div>
                 <h4 style="margin:0; color:#007bff;" th:text="${bus.route.startLocation} + ' ➔ ' + ${bus.route.endLocation}"></h4>
                 <p style="margin:5px 0;">Biển số: <b th:text="${bus.plateNumber}"></b> | Loại: <span th:text="${bus.busType}"></span></p>
+
+                <p style="margin:5px 0; color: #e67e22; font-weight: bold;">
+                    🕒 Thời gian xuất phát: <span th:text="${bus.departureTime != null ? #temporals.format(bus.departureTime, 'dd/MM/yyyy HH:mm') : 'Chưa xếp lịch'}"></span>
+                </p>
+
                 <p style="margin:0; color: green; font-weight: bold;" th:text="'Giá vé: ' + ${#numbers.formatDecimal(bus.route.basePrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></p>
             </div>
             <a th:href="@{/bus/{id}/seats(id=${bus.id})}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold;">CHỌN GHẾ</a>

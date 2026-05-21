@@ -1,6 +1,7 @@
 package com.bus.controller;
 
 import com.bus.entity.Bus;
+import com.bus.entity.Ticket;
 import com.bus.entity.User;
 import com.bus.repository.BusRepository;
 import com.bus.repository.SeatRepository;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -52,16 +55,14 @@ public class HomeController {
     @Autowired private UserRepository userRepo;
     @Autowired private BookingService bookingService;
 
-    // 1. TÌM KIẾM CHUYẾN XE
     @GetMapping("/search-bus")
     public String searchBus(@RequestParam String start, @RequestParam String end, Model model) {
         model.addAttribute("buses", busRepo.findByRoute_StartLocationAndRoute_EndLocation(start, end));
         model.addAttribute("start", start);
         model.addAttribute("end", end);
-        return "home"; // Trả về lại trang chủ cùng danh sách kết quả
+        return "home";
     }
 
-    // 2. XEM SƠ ĐỒ GHẾ CỦA TỪNG XE (CORE-05)
     @GetMapping("/bus/{id}/seats")
     public String viewSeatMap(@PathVariable Long id, Model model) {
         Bus bus = busRepo.findById(id).orElseThrow();
@@ -70,7 +71,6 @@ public class HomeController {
         return "seat-map";
     }
 
-    // 3. XEM LỊCH SỬ ĐẶT VÉ CÁ NHÂN
     @GetMapping("/my-tickets")
     public String myTickets(Authentication auth, Model model) {
         if (auth == null) return "redirect:/login";
@@ -79,7 +79,6 @@ public class HomeController {
         return "my-tickets";
     }
 
-    // 4. HÀNH KHÁCH CHỦ ĐỘNG HỦY VÉ (CORE-09)
     @PostMapping("/cancel-ticket/{id}")
     public String passengerCancelTicket(@PathVariable Long id, RedirectAttributes attrs) {
         try {
@@ -90,5 +89,27 @@ public class HomeController {
             attrs.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/my-tickets";
+    }
+
+    @GetMapping("/lookup-ticket")
+    public String showLookupForm() {
+        return "lookup-ticket";
+    }
+
+    @PostMapping("/lookup-ticket")
+    public String processLookup(@RequestParam String phone, @RequestParam String email, Model model) {
+        // Gọi hàm tìm kiếm từ DB
+        List<Ticket> tickets = ticketRepo.findByUser_PhoneAndUser_EmailOrderByBookingTimeDesc(phone, email);
+
+        if (tickets.isEmpty()) {
+            model.addAttribute("error", "Không tìm thấy chuyến đi nào khớp với Số điện thoại và Email này!");
+        } else {
+            model.addAttribute("tickets", tickets);
+        }
+
+        model.addAttribute("phone", phone);
+        model.addAttribute("email", email);
+
+        return "lookup-ticket";
     }
 }

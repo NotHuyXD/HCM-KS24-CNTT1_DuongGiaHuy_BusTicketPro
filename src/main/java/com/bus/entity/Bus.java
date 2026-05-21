@@ -1,6 +1,8 @@
 package com.bus.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 @Data
@@ -17,4 +19,8 @@ public class Bus {
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @Column(name = "departure_time")
+    private java.time.LocalDateTime departureTime;
 }

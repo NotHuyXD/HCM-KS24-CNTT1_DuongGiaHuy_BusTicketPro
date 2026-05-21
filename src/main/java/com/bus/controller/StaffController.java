@@ -18,14 +18,12 @@ public class StaffController {
     @Autowired private TicketRepository ticketRepo;
     @Autowired private BookingService bookingService;
 
-    // CORE-08: Xem danh sách toàn bộ vé chờ xử lý và quản lý
     @GetMapping("/tickets")
     public String listTickets(Model model) {
         model.addAttribute("tickets", ticketRepo.findAll());
         return "staff/ticket-list";
     }
 
-    // CORE-08: Xác nhận thanh toán (Chuyển PENDING -> PAID)
     @PostMapping("/tickets/approve/{id}")
     public String approveTicket(@PathVariable Long id, RedirectAttributes attrs) {
         try {
@@ -37,7 +35,6 @@ public class StaffController {
         return "redirect:/staff/tickets";
     }
 
-    // CORE-08: Hủy các vé quá hạn hoặc hủy theo yêu cầu (Chuyển sang CANCELLED)
     @PostMapping("/tickets/cancel/{id}")
     public String cancelTicket(@PathVariable Long id, RedirectAttributes attrs) {
         try {

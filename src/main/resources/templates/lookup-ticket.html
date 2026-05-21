@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tra Cứu Chuyến Đi - Bus Ticket Pro</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; }
+        .lookup-container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .search-box { background: #2c3e50; padding: 25px; border-radius: 8px; color: white; margin-bottom: 25px; text-align: center; }
+        .form-row { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        input { padding: 12px; border-radius: 4px; border: 1px solid #ccc; width: 250px; font-size: 14px; }
+        button { padding: 12px 25px; background: #ffc107; color: #333; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 14px; }
+        button:hover { background: #e0a800; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #343a40; color: white; }
+        .alert { padding: 12px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; text-align: center; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .badge { padding: 5px 10px; border-radius: 4px; color: white; font-weight: bold; font-size: 12px; }
+        .badge.PENDING { background-color: #ffc107; color: black; }
+        .badge.PAID { background-color: #28a745; }
+        .badge.CANCELLED { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="lookup-container">
+    <a th:href="@{/}" style="color: #007bff; text-decoration: none; font-weight: bold;">⬅ Quay lại trang chủ</a>
+
+    <div class="search-box">
+        <h2 style="margin: 0 0 10px 0;">🔍 Tra Cứu Thông Tin Chuyến Đi</h2>
+        <p style="margin: 0; font-size: 14px; color: #bdc3c7;">Vui lòng nhập chính xác Số điện thoại và Email đã dùng để đặt vé</p>
+
+        <form th:action="@{/lookup-ticket}" method="post" class="form-row">
+            <input type="text" name="phone" required placeholder="Nhập Số điện thoại..." th:value="${phone}">
+            <input type="email" name="email" required placeholder="Nhập địa chỉ Email..." th:value="${email}">
+            <button type="submit">TRA CỨU NGAY</button>
+        </form>
+    </div>
+
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+    <div th:if="${tickets != null}">
+        <h3 style="color: #28a745;">🎉 Đã tìm thấy <span th:text="${#lists.size(tickets)}"></span> chuyến đi của bạn:</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Mã Vé</th>
+                <th>Tuyến Đường</th>
+                <th>Biển Số Xe</th>
+                <th>Ghế</th>
+                <th>Ngày Đặt</th>
+                <th>Trạng Thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${tickets}">
+                <td th:text="${t.ticketCode}" style="font-weight: bold; color: #007bff;"></td>
+                <td th:text="${t.seat.bus.route.startLocation} + ' ➔ ' + ${t.seat.bus.route.endLocation}"></td>
+                <td th:text="${t.seat.bus.plateNumber}"></td>
+                <td th:text="${t.seat.seatName}" style="font-weight: bold; color: #e67e22;"></td>
+                <td th:text="${#dates.format(t.bookingTime, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <span th:class="'badge ' + ${t.status.name()}" th:text="${t.status}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

@@ -32,7 +32,6 @@ public class AuthController {
         return "register";
     }
 
-    // Logic tham khảo trong luồng xử lý POST Register của bạn
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("user") User user, RedirectAttributes attrs) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -40,12 +39,9 @@ public class AuthController {
             return "redirect:/register";
         }
 
-        // Mã hóa mật khẩu bảo mật
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Mặc định đăng ký từ web sẽ là phân hệ Hành khách
         user.setRole(User.Role.PASSENGER);
 
-        // Lúc này user đã chứa sẵn cả email và address từ form HTML gửi lên
         userRepository.save(user);
 
         attrs.addFlashAttribute("success", "Đăng ký thành công! Hãy đăng nhập hệ thống.");

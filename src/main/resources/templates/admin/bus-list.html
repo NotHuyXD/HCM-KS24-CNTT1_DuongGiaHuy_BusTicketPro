@@ -26,23 +26,27 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Biển số xe</th>
-            <th>Loại xe</th>
-            <th>Sức chứa</th>
-            <th>Tuyến đường chạy</th>
-            <th>Thao tác</th>
+            <th>Biển Số Xe</th>
+            <th>Loại Xe</th>
+            <th>Sức Chứa</th>
+            <th>Tuyến Đường Running</th>
+            <th>Giờ Khởi Hành</th> <th>Hành Động</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="bus : ${buses}">
-            <td th:text="${bus.id}"></td>
-            <td th:text="${bus.plateNumber}"></td>
-            <td th:text="${bus.busType}"></td>
-            <td th:text="${bus.capacity} + ' chỗ'"></td>
-            <td th:text="${bus.route.startLocation} + ' - ' + ${bus.route.endLocation}"></td>
+        <tr th:each="b : ${buses}">
+            <td th:text="${b.id}"></td>
+            <td th:text="${b.plateNumber}" style="font-weight: bold;"></td>
+            <td th:text="${b.busType}"></td>
+            <td th:text="${b.capacity} + ' chỗ'"></td>
+            <td th:text="${b.route != null ? b.route.startLocation + ' ➔ ' + b.route.endLocation : 'Chưa gán tuyến'}"></td>
+
+            <td th:text="${b.departureTime != null ? #temporals.format(b.departureTime, 'dd/MM/yyyy HH:mm') : 'Chưa xếp lịch'}"
+                style="font-weight: bold; color: #e67e22;"></td>
+
             <td>
-                <a th:href="@{/admin/buses/edit/{id}(id=${bus.id})}" class="btn btn-edit">Sửa</a>
-                <form th:action="@{/admin/buses/delete/{id}(id=${bus.id})}" method="post" style="display:inline;">
+                <a th:href="@{/admin/buses/edit/{id}(id=${b.id})}" class="btn btn-edit">Sửa</a>
+                <form th:action="@{/admin/buses/delete/{id}(id=${b.id})}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-delete" onclick="return confirm('Bạn có chắc muốn xóa xe này?');">Xóa</button>
                 </form>
             </td>

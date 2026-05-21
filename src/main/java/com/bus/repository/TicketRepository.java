@@ -23,4 +23,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t FROM Ticket t WHERE t.status = 'PENDING' AND t.bookingTime < :cutoffTime")
     List<Ticket> findExpiredPendingTickets(@Param("cutoffTime") java.util.Date cutoffTime);
 
+    List<Ticket> findByUser_PhoneAndUser_EmailOrderByBookingTimeDesc(String phone, String email);
+
+    @Query("SELECT t FROM Ticket t JOIN t.seat s JOIN s.bus b " +
+            "WHERE t.status = 'PENDING' AND b.departureTime < :now")
+    List<Ticket> findPendingTicketsOfDepartedBuses(@Param("now") java.time.LocalDateTime now);
 }
