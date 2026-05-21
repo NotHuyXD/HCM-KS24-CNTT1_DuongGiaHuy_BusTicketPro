@@ -23,6 +23,7 @@
     <div>
         <span th:if="${#request.userPrincipal != null}">
             Xin chào, <b th:text="${#request.userPrincipal.name}"></b>!
+            <a th:href="@{/profile}" style="color: white; margin-right: 15px; text-decoration: none;">👤 Trang cá nhân</a>
             <a th:href="@{/my-tickets}" style="color: #ffc107; margin: 0 15px;">🎟 Vé của tôi</a>
             <a th:href="@{/logout}" style="color: white;">Đăng xuất</a>
         </span>

@@ -26,7 +26,10 @@
 <div class="content">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2>Dành Cho Nhân Viên: Kiểm Duyệt & Quản Lý Trạng Thái Vé</h2>
-        <a th:href="@{/logout}" style="color: #dc3545; font-weight: bold; text-dash: none;">🚪 Đăng xuất</a>
+        <div>
+            <a th:href="@{/profile}" style="color: #17a2b8; font-weight: bold; margin-right: 20px; text-decoration: none;">👤 Hồ sơ cá nhân</a>
+            <a th:href="@{/logout}" style="color: #dc3545; font-weight: bold;">🚪 Đăng xuất</a>
+        </div>
     </div>
 
     <div th:if="${success}" class="alert success" th:text="${success}"></div>

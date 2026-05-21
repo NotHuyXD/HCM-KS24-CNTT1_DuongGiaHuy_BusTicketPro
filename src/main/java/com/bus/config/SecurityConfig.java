@@ -23,17 +23,27 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
 
+                .antMatchers("/", "/register", "/login", "/lookup-ticket", "/search-bus", "/search", "/css/**", "/js/**").permitAll()
+
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
+
                 .antMatchers("/staff/**").hasAnyAuthority("ADMIN", "STAFF")
+
                 .antMatchers("/booking/**").hasAnyAuthority("PASSENGER", "STAFF", "ADMIN")
-                .antMatchers("/", "/register", "/login", "/search").permitAll()
+
+                .antMatchers("/profile/**").authenticated()
+
                 .anyRequest().authenticated()
+
                 .and()
+
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/")
                 .permitAll()
+
                 .and()
+
                 .logout()
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();

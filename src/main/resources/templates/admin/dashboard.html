@@ -6,13 +6,11 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; display: flex; }
 
-        /* Cấu trúc Thanh Sidebar */
         .sidebar { width: 240px; background: #2c3e50; position: fixed; height: 100%; color: white; padding-top: 20px; }
         .sidebar h2 { text-align: center; font-size: 20px; margin-bottom: 30px; color: #ecf0f1; }
         .sidebar a { display: block; color: #bdc3c7; padding: 15px 20px; text-decoration: none; font-weight: bold; }
         .sidebar a:hover, .sidebar a.active { background: #34495e; color: white; border-left: 4px solid #007bff; }
 
-        /* Cấu trúc Vùng hiển thị Nội dung */
         .content { margin-left: 240px; padding: 30px; flex: 1; }
         .header { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -23,6 +21,7 @@
 
 <div class="sidebar">
     <h2>Bus Ticket Admin</h2>
+    <a th:href="@{/profile}">👤 Hồ sơ cá nhân</a>
     <a th:href="@{/admin/routes}">⚙ Cấu hình Tuyến đường</a>
     <a th:href="@{/admin/buses}">🚌 Quản lý Danh mục Xe</a>
     <a th:href="@{/admin/reports}">📊 Báo cáo thống kê</a>
